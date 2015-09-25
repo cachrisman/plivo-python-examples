@@ -1,0 +1,9 @@
+Flask
+Jinja2
+Werkzeug
+certifi
+chardet
+distribute
+plivo
+requests
+wsgiref
