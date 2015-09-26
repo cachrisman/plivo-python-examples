@@ -162,29 +162,23 @@ def save_record_url():
 
 @app.route('/forward_sms/', methods=['GET', 'POST'])
 def inbound_sms():
-
-    print request.form
-
     # Sender's phone number
-    # from_number = request.values.get('From')
     from_number = request.form['From']
 
     # Receiver's phone number - Plivo number
     plivo_number = request.form['To']
 
+    # number which to forward message to
     to_forward = request.form['forward']
 
     # The text which was received
-    # text = request.values.get('Text')
     text = request.form['Text']
 
     # Print the message
     print 'Text received: %s - From: %s' % (text, from_number)
 
     # Generate a Message XML with the details of the reply to be sent
-
     resp = plivoxml.Response()
-
     body = '(From: %s) %s' % (from_number, text)
     params = {
         # Sender's phone number
