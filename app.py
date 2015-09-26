@@ -10,8 +10,8 @@ app = Flask(__name__)
 # Use the url which heroku gives you after deploying
 base_url = 'https://charlieplivo.herokuapp.com'
 
-auth_id = '***REMOVED***'
-auth_token = '***REMOVED***'
+auth_id = os.environ.get('auth_id')
+auth_token = os.environ.get('auth_token')
 
 # <Dial> Element attributes
 dial_callerId = ''
