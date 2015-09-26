@@ -1,9 +1,8 @@
 import os
 
 from flask import Flask, request, make_response, Response
-import plivo
-import plivoxml
-# import pdb
+import plivo, plivoxml
+import pdb
 
 
 app = Flask(__name__)
@@ -18,9 +17,6 @@ auth_token = '***REMOVED***'
 dial_callerId = ''
 dial_action = base_url + 'playxml/'
 dial_number = ''
-
-# The phone number to which the SMS has to be forwarded
-to_forward = '13039025082'
 
 # <Play> Element attributes
 play_url = 'http://example.com/trumpet.mp3'
@@ -166,21 +162,21 @@ def save_record_url():
 
 @app.route('/forward_sms/', methods=['GET', 'POST'])
 def inbound_sms():
-    # pdb.set_trace()
-    # data = request.get_json(force=True)
-    # data = request.json
+
+    print request.form
 
     # Sender's phone number
     # from_number = request.values.get('From')
-    from_number = request.json['From']
+    from_number = request.form['From']
 
     # Receiver's phone number - Plivo number
-    # to_number = request.values.get('To')
-    to_number = request.json['To']
+    plivo_number = request.form['To']
+
+    to_forward = request.form['forward']
 
     # The text which was received
     # text = request.values.get('Text')
-    text = request.json['Text']
+    text = request.form['Text']
 
     # Print the message
     print 'Text received: %s - From: %s' % (text, from_number)
@@ -189,10 +185,10 @@ def inbound_sms():
 
     resp = plivoxml.Response()
 
-    body = 'Forwarded message : %s' % (text)
+    body = '(From: %s) %s' % (from_number, text)
     params = {
         # Sender's phone number
-        'src': to_number,
+        'src': plivo_number,
         # Receiver's phone number
         'dst': to_forward,
     }
@@ -208,4 +204,4 @@ def inbound_sms():
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(host='0.0.0.0', port=port, debug=True)
